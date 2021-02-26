@@ -11,111 +11,95 @@ export class HelloComponent implements OnInit {
   private opt = 0;
 
   ngOnInit() {
-    switch(this.opt){
+    switch (this.opt) {
       case 0: {
-        /*
-      Promise - Emite un solo valor
-      Observable - Emite multiple valores
-    */
-    const numberPromise = new Promise((resolve, reject) => {
-      resolve(5);
-      reject(0);
-    });
+        /* Promise - Emite un solo valor
+         * Observable - Emite multiple valores
+         */
+        const numberPromise = new Promise((resolve, reject) => {
+          resolve(5);
+          reject(0);
+        });
 
-    numberPromise.then(
-      value => console.log(`***Promise ${value}`)
-    );
+        numberPromise.then(value => console.log(`Promise ${value}`));
 
-    const numberObservables = new Observable(observer => {
-      observer.next(5);
-      observer.next(15);
-    });
+        const numberObservables = new Observable(observer => {
+          observer.next(5);
+          observer.next(15);
+        });
 
-    numberObservables.subscribe(
-      value => console.log(`***Observables ${value}`)
-    );
+        numberObservables.subscribe(value =>
+          console.log(`Observables ${value}`)
+        );
         break;
       }
       case 1: {
-        /*
-      Promise - Eager to execute
-      Observable - Executes only when it is called or someone is subscribing
-    */
+        /* Promise - Ejecución ansiosa
+         * Observable - Se ejecuta solo cuando se llama o alguien se está suscribiendo
+         */
+        const promise = new Promise(() => console.log(`Promise is called`));
 
-    const promise = new Promise(() => 
-      console.log(`Promise is called`)
-    );
-
-    const observable = new Observable(() =>
-      console.log(`Observable is called`)
-    );
-    observable.subscribe();
+        const observable = new Observable(() =>
+          console.log(`Observable is called`)
+        );
+        observable.subscribe();
 
         break;
       }
       case 2: {
-        /*
-      Promise - Not sharable
-      Observable - Can be shared and subscribed that shared value by multiple subscribers. And all the subscribers will execute at a single point of time.
-    */
+        /* Promise - No comparte valores
+         * Observable - Puede ser compartido y suscrito ese valor compartido por múltiples suscriptores. Y todos los suscriptores se ejecutarán en un solo momento.
+         */
+        const observableToShare = new Observable(observer => {
+          console.log(`I was called at ${new Date()}`);
+          setTimeout(() => observer.next(), 2000);
+        });
 
-    const observableToShare = new Observable(observer => {
-      console.log(`I was called at ${new Date()}`);
-      setTimeout(() => observer.next(), 2000);
-    });
-
-    const sharedObserable = observableToShare.pipe(share());
-    sharedObserable.subscribe(() =>
-      console.log(`some task 1 at ${new Date()}`)
-    );
-    sharedObserable.subscribe(() =>
-      console.log(`some task 2 at ${new Date()}`)
-    );
+        const sharedObserable = observableToShare.pipe(share());
+        sharedObserable.subscribe(() =>
+          console.log(`some task 1 at ${new Date()}`)
+        );
+        sharedObserable.subscribe(() =>
+          console.log(`some task 2 at ${new Date()}`)
+        );
         break;
       }
       case 3: {
-         /*
-      Promise - Not cancellable
-      Observable - Can be cancellable
-    */
+        /* Promise - No cancelable
+         * Observable - Puede ser cancelable
+         */
+        const cancellable = new Observable(observer => {
+          let i = 0;
+          setInterval(() => {
+            observer.next(i++);
+          }, 1000);
+        });
 
-    const cancellable = new Observable(observer => {
-      let i = 0;
-      setInterval(() => {
-        observer.next(i++);
-      }, 1000);
-    });
-
-    const cancellableSubscription = cancellable.subscribe(
-      value => console.log(value)
-    );
-    cancellableSubscription.unsubscribe();
-
+        const cancellableSubscription = cancellable.subscribe(value =>
+          console.log(value)
+        );
+        cancellableSubscription.unsubscribe();
         break;
       }
       case 4: {
-        /*
-      Promise - Always asynchronous
-      Observable - possibly asynchronous
-    */
-    const asyncPromise = new Promise(
-      resolve => resolve(5)
-    );
+        /* Promise - Siempre es asíncorno
+         * Observable - Posible asíncorno
+         */
+        const asyncPromise = new Promise(resolve => resolve(5));
 
-    asyncPromise.then(
-      value => console.log(`Everytime Asyn promise ${value}!`)
-    );
-    console.log("And now we are here with promise");
+        asyncPromise.then(value =>
+          console.log(`Everytime Asyn promise ${value}!`)
+        );
+        console.log("And now we are here with promise");
 
-    const possibleAsyncObservable = new Observable(observer =>
-      observer.next(5)
-    );
+        const possibleAsyncObservable = new Observable(observer =>
+          observer.next(5)
+        );
 
-    possibleAsyncObservable.subscribe(value =>
-      console.log(`Possible Async observable ${value} !`)
-    );
-
-    console.log("And now we are here with observables");
+        possibleAsyncObservable.subscribe(value =>
+          console.log(`Possible Async observable ${value} !`)
+        );
+        console.log("And now we are here with observables");
         break;
       }
     }
