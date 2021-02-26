@@ -8,7 +8,7 @@ import { share } from "rxjs/operators";
 })
 export class HelloComponent implements OnInit {
   @Input() name: string;
-  private opt = 0;
+  private opt = 2;
 
   ngOnInit() {
     switch (this.opt) {
@@ -82,8 +82,8 @@ export class HelloComponent implements OnInit {
         break;
       }
       case 4: {
-        /* Promise - Siempre es asíncorno
-         * Observable - Posible asíncorno
+        /* Promise - Siempre es asíncrono
+         * Observable - Posible asíncrono
          */
         const asyncPromise = new Promise(resolve => resolve(5));
 
